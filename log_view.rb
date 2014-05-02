@@ -3,9 +3,14 @@ require 'io/console'
 
 class View
 
+  def clear_screen
+    puts "\e[H\e[2J"
+  end
+
   def welcome  #welcome/login screen
     puts "Welcome to THE LOG"
-    puts "type LOGIN to login to an existing account or type CREATE to make a new account. "
+    puts "type LOGIN to login to an existing account"
+    puts "type CREATE to make a new account"
     puts "type QUIT at any time to exit this app"
     choice = gets.chomp.downcase
   end
@@ -38,7 +43,9 @@ class View
     user_info
   end
 
-  def display_logs(user_logs)
+  ##### LOG SPECIFIC METHODS
+
+  def display_logs(user_logs) #user_logs is an array of logs
     user_logs.each do |log|
       entry = "| #{log[:name].ljust(25)} |"
       puts  "-" * (entry.length)
@@ -50,61 +57,85 @@ class View
     choice = gets.chomp.type
   end
 
-  def create_logs
-    log_info = {}
-    name
+  def log_details(log)
+    log.each_key do |entry|
+      puts "#{entry}: #{log[entry]}"
+    end
   end
 
-  def display_events(log, events)
+  def create_logs #returns a hash of things a user can put in.
+    log_info = {}
+    puts "Enter the name of the log"
+    log_info[:name] = gets.chomp
+    puts "Enter the description of the log"
+    log_info[:description] = gets.chomp
+    puts "Enter the priority of the log"
+    log_info[:priority] = gets.chomp
+    puts "Log created!"
+    log_info
+  end
+
+  def update_log(log) #log is a hash
+    log.each_key do |entry|
+      puts "Type in the new value of the entry #{entry}."
+      log[entry] = gets.chomp
+    end
+    puts "log updated!"
+  end
+
+  def delete_log?
+    puts "Are you sure you want to delete this log? (Y/N)"
+    choice = gets.chomp
+  end
+
+  def delete_log
+    puts "Log Deleted!"
+  end
+
+  def create_events
+    events_info = {}
+    puts "Enter the name of the event"
+    events_info[:name] = gets.chomp
+    puts "Enter the description of the event"
+    events_info[:description] = gets.chomp
+    events_info
+  end
+
+  def display_events(log, events) #logs takes a log (hash), events is an array of event hashes
     puts log[:name]
     events.each do |event|
+      entry = "| EVENT_ID = #{event[:id]}| #{event[:name].ljust(25)} |"
       puts  "-" * (entry.length)
-      entry = "|#{event[:id]}| #{event[:name].ljust(25)} |"
       puts entry
     end
-    puts puts  "-" * (entry.length)
+    puts "-" * (entry.length)
     puts "to view an EVENT type in the EVENT_ID"
-    puts "to create a new log type in \"create_log\""
+    puts "type CREATE_LOG to create a new log"
     puts "type LOGOUT to logout at any time."
     choice = gets.chomp
   end
 
+  def update_event(event) #event is a hash
+    event.each_entry do |entry|
+      puts "Type in the new value of the entry #{entry}."
+      event[entry] = gets.chomp
+    end
+    puts "event updated!"
+  end
 
+  def delete_event?
+    puts "Are you sure you want to delete this event? (Y/N)"
+    choice = gets.chomp
+  end
 
-  # def add_event
-  #   puts "Type in the event you want to add"
-  #   gets.chomp
-  # end
+  def delete_event
+    puts "Event Deleted!"
+  end
 
-  # def add_success!
-  #   puts "Entry added!"
-  # end
-
-  # def complete_task(list)
-  #   puts "Enter number of the task you would like to complete."
-  #   self.display_tasks(list)
-  #   gets.chomp
-  # end
-
-  # def complete_success!
-  #   puts "Task completed!"
-  # end
-
-  # def delete_task(list)
-  #   puts "Enter the number of which task you would like to delete"
-  #   self.display_tasks(list)
-  #   gets.chomp
-  # end
-
-  # def delete_success!
-  #   puts "Task deleted!"
-  # end
-
-  # def display_tasks (list)
-  #   list.tasks.each_with_index do |task, index|
-  #     number = index + 1
-  #     puts "#{number}. " + "#{task}:" + " #{task.completed}"
-  #   end
-  # end
+  def event_details(event)
+    event.each_key do |entry|
+      puts "#{entry}: #{event[entry]}"
+    end
+  end
 
 end
