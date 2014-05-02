@@ -34,7 +34,7 @@ class View
     puts "enter your e-mail address."
     user_info[:email] = gets.chomp
     puts "enter your password."
-    user_info[:password] STDIN.noecho(&:gets).chomp
+    user_info[:password] = STDIN.noecho(&:gets).chomp
     user_info
   end
 
