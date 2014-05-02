@@ -34,7 +34,7 @@ class View
     puts "enter your e-mail address."
     user_info[:email] = gets.chomp
     puts "enter your password."
-    user_info[:password] STDIN.noecho(&:gets).chomp
+    user_info[:password] = STDIN.noecho(&:gets).chomp
     user_info
   end
 
@@ -50,6 +50,11 @@ class View
     choice = gets.chomp.type
   end
 
+  def create_logs
+    log_info = {}
+    name
+  end
+
   def display_events(log, events)
     puts log[:name]
     events.each do |event|
@@ -63,6 +68,8 @@ class View
     puts "type LOGOUT to logout at any time."
     choice = gets.chomp
   end
+
+
 
   # def add_event
   #   puts "Type in the event you want to add"
@@ -98,9 +105,6 @@ class View
   #     number = index + 1
   #     puts "#{number}. " + "#{task}:" + " #{task.completed}"
   #   end
-  end
-
-end
-
+  # end
 
 end
