@@ -3,9 +3,9 @@ the_log
 
 <h2>The Incredible Log of Logness</h2>
 
-<p>Amy & Jason - Model</p>
-<p>Will - Front end</p>
-<p>Alejandro & Zack - Controller</p>
+<p>Amy & Jason - Model. ruby_model.rb</p>
+<p>Will - Front end. ruby_view.rb</p>
+<p>Alejandro & Zack - Controller. ruby.rb</p>
 
 
 <p>As the controller, I expect to call a function 'user.create' with parameters 'name', 'email' & 'password', all strings.</p>
