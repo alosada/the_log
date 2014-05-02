@@ -4,9 +4,9 @@ def database_connection(db_name)
   SQLite3::Database.new( "#{db_name}.db" )
 end
 
-# database_connection("captains_log").execute("drop table if exists Users;")
-# database_connection("captains_log").execute("drop table if exists Logs;")
-# database_connection("captains_log").execute("drop table if exists Events;")
+database_connection("captains_log").execute("drop table if exists Users;")
+database_connection("captains_log").execute("drop table if exists Logs;")
+database_connection("captains_log").execute("drop table if exists Events;")
 
 database_connection("captains_log").execute(<<-SQL
   create table Users
@@ -16,7 +16,7 @@ database_connection("captains_log").execute(<<-SQL
     password varchar(255),
     name varchar(255),
     created_at datetime default CURRENT_TIMESTAMP,
-    updated_at datetime default CURRENT_TIMESTAMPdata
+    updated_at datetime default CURRENT_TIMESTAMP
     );
   SQL
   )
@@ -29,7 +29,7 @@ database_connection("captains_log").execute(<<-SQL
     user_id INTEGER REFERENCES Users(id),
     name varchar(255),
     description varchar(255),
-    status varchar(255),
+    status varchar(255) not null default '',
     priority varchar(255),
     created_at datetime default CURRENT_TIMESTAMP,
     updated_at datetime default CURRENT_TIMESTAMP,
