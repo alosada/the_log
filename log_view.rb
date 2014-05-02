@@ -1,4 +1,3 @@
-
 require 'io/console'
 
 class View
@@ -21,8 +20,8 @@ class View
 
   def login
     user_pass = {}
-    puts "enter your username"
-    user_pass[:user_name] = gets.chomp
+    puts "enter your email"
+    user_pass[:email] = gets.chomp
     puts "Enter your password: "
     user_pass[:password] = STDIN.noecho(&:gets).chomp
     user_pass
@@ -35,7 +34,7 @@ class View
   def create_account
     user_info = {}
     puts "enter your desired username."
-    user_info[:user_name] = gets.chomp
+    user_info[:name] = gets.chomp
     puts "enter your e-mail address."
     user_info[:email] = gets.chomp
     puts "enter your password."

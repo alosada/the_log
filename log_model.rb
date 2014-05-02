@@ -1,5 +1,5 @@
 require 'sqlite3'
-require_relative "database_setup.rb"
+# require_relative "database_setup.rb"
 
 db_name = 'captains_log.db'
 db_connection = SQLite3::Database.new( "#{db_name}" )
@@ -42,7 +42,7 @@ end
 users = Users.new(db_connection)
 # users.create(name: 'Bob', email: 'testy@mctesterson.com', password: 'test123')
 
-puts users.authenticate_user(email: 'testy@mctesterson.com', password: 'test123')
+# puts users.authenticate_user(email: 'testy@mctesterson.com', password: 'test123')
 
 # users = Users.new
 # users.create(name: "Bob", email: "testy@mctesterson.com", password: "test123")

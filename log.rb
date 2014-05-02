@@ -1,50 +1,46 @@
-require_relative 'log_model'
-require_relative 'log_view'
+require '/Users/apprentice/Desktop/zack_ale_log_MVP/the_log/log_model.rb'
+require '/Users/apprentice/Desktop/zack_ale_log_MVP/the_log/log_view.rb'
 
-module Factories
-  def create_view
-    View.new
-  end
+# module Factories
+#   def create_view
+#     View.new
+#   end
 
-  def create_model
-    Model.new
-  end
-end
+#   def create_model
+#     Users.new
+#     #Model.new
+#   end
+
+# end
 
 
 
 class Controller
+
   def initialize(model,view)
     @model = model
     @view = view
     @quit = false
     @current_user = nil
     @login = false
-
+    @command = nil
   end
 
-self.view.display(self.model.welcome)
-self.view.display(self.model.menu)
 
   def start
-    #until quit?
-    @input = self.view.welcome
-    if @input == 'login'
+    command = @view.welcome
+    if command == 'login'
       authenticate
-    elsif @input == 'create'
+    elsif command == 'create'
       create_user
-    elsif @input == 'quit'
+    elsif command == 'quit'
       quit
     else
-      self.view.invalid_input
+      @view.invalid_input
       start
     end
   end
 
-unless quit?
-  @output = self.model.get_logs
-  self.view.display_logs(@output)
-end
 
 
 
@@ -59,26 +55,26 @@ end
   end
 
   def create_user
-
+    input = @view.create_account
+    @model.authenticate_user(input)
   end
 
   def authenticate
-    input = self.view.login
-    quit if input =='quit'
-    @login = self.model.authenticate_user(input)
+    input = @view.login
+    quit if input == 'quit'
+    @login_status = @model.authenticate_user(input)
     @current_user = input[:email] if @login
-    unless @login || !@quit
-      self.view.login_fail
+    unless @login_status || !quit?
+      @view.login_fail
       authenticate
     end
   end
 
-
-
 end
+db_name = 'captains_log.db'
+db_connection = SQLite3::Database.new( "#{db_name}" )
 
-
-
-log_cont = Controller.new(create_model, create_view)
+log_model = Users.new(db_name)
+log_view = View.new
+log_cont = Controller.new(log_model, log_view)
 log_cont.start
-log_cont.input = gets.chomp
