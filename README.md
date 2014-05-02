@@ -1,7 +1,7 @@
 the_log
 =======
 
-The Log of Logness
+<h2>The Incredible Log of Logness</h2>
 
 <p>Amy & Jason - Model</p>
 <p>Will - Front end</p>
