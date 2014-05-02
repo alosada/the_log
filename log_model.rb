@@ -42,7 +42,7 @@ end
 users = Users.new(db_connection)
 # users.create(name: 'Bob', email: 'testy@mctesterson.com', password: 'test123')
 
-puts users.authenticate_user(email: 'testy@mctesterson.com', password: 'test123')
+# puts users.authenticate_user(email: 'testy@mctesterson.com', password: 'test123')
 
 # users = Users.new
 # users.create(name: "Bob", email: "testy@mctesterson.com", password: "test123")

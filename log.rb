@@ -23,19 +23,20 @@ class Controller
     @quit = false
     @current_user = nil
     @login = false
+    @command = nil
   end
 
 
   def start
-    @input = @view.welcome
-    if @input == 'login'
+    command = @view.welcome
+    if command == 'login'
       authenticate
-    elsif @input == 'create'
+    elsif command == 'create'
       create_user
-    elsif @input == 'quit'
+    elsif command == 'quit'
       quit
     else
-      self.view.invalid_input
+      @view.invalid_input
       start
     end
   end
@@ -54,14 +55,15 @@ class Controller
   end
 
   def create_user
-
+    input = @view.create_account
+    @model.authenticate_user(input)
   end
 
   def authenticate
     input = @view.login
     quit if input == 'quit'
     @login_status = @model.authenticate_user(input)
-    @current_user = input[:user_name] if @login
+    @current_user = input[:email] if @login
     unless @login_status || !quit?
       @view.login_fail
       authenticate
