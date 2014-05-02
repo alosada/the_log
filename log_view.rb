@@ -52,21 +52,46 @@ class View
 
   def create_logs
     log_info = {}
-    name
+    puts "Enter the name of the log"
+    log_info[:name] = gets.chomp
+    puts "Enter the description of the log"
+    log_info[:description] = gets.chomp
+    puts "Enter the priority of the log"
+    log_info[:priority] = gets.chomp
+    puts "Log created!"
+    log_info
+  end
+
+  def create_events
+    events_info = {}
+    puts "Enter the name of the event"
+    events_info[:name] = gets.chomp
+    puts "Enter the description of the event"
+    events_info[:description] = gets.chomp
+    events_info
   end
 
   def display_events(log, events)
     puts log[:name]
     events.each do |event|
+      entry = "| EVENT_ID = #{event[:id]}| #{event[:name].ljust(25)} |"
       puts  "-" * (entry.length)
-      entry = "|#{event[:id]}| #{event[:name].ljust(25)} |"
       puts entry
     end
-    puts puts  "-" * (entry.length)
+    puts "-" * (entry.length)
     puts "to view an EVENT type in the EVENT_ID"
-    puts "to create a new log type in \"create_log\""
+    puts "type CREATE_LOG to create a new log"
     puts "type LOGOUT to logout at any time."
     choice = gets.chomp
+  end
+
+  def update_log(log)
+    log.each do |entry|
+
+
+  end
+  def update_event
+
   end
 
 
