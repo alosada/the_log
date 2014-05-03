@@ -1,17 +1,6 @@
 require '/Users/apprentice/Desktop/zack_ale_log_MVP/the_log/log_model.rb'
 require '/Users/apprentice/Desktop/zack_ale_log_MVP/the_log/log_view.rb'
 
-# module Factories
-#   def create_view
-#     View.new
-#   end
-#   def create_model
-#     Users.new
-#     #Model.new
-#   end
-# end
-
-
 
 class Controller
 
