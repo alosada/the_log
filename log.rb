@@ -31,11 +31,9 @@ class Controller
 
   def show_logs
     p 'inside show logs'
-    output = @logs.all(@current_user)
+    output = @logs.view_all(@current_user)
     input = @view.display_logs(output)
   end
-
-
 
   private
 
@@ -58,8 +56,6 @@ class Controller
     quit if input == 'quit'
     @login = @users.authenticate_user(input)
     @current_user = input[:email] if @login
-    #p @current_user
-    p @login
     unless @login || quit?
       @view.login_fail
       authenticate
