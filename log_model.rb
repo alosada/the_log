@@ -17,7 +17,7 @@ class Logs
       select * from Logs
       JOIN Users
       ON (Logs.user_id = Users.id)
-      WHERE Users.email IS ('testy@mctesterson.com');
+      WHERE Users.email IS ('#{email}');
     SQL
     )
   end
