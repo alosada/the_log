@@ -5,12 +5,10 @@ require '/Users/apprentice/Desktop/zack_ale_log_MVP/the_log/log_view.rb'
 #   def create_view
 #     View.new
 #   end
-
 #   def create_model
 #     Users.new
 #     #Model.new
 #   end
-
 # end
 
 
@@ -18,7 +16,8 @@ require '/Users/apprentice/Desktop/zack_ale_log_MVP/the_log/log_view.rb'
 class Controller
 
   def initialize(model,view)
-    @model = model
+    @users = model[0]
+    @logs = model[1]
     @view = view
     @quit = false
     @current_user = nil
@@ -41,6 +40,12 @@ class Controller
     end
   end
 
+  def show_logs
+    p 'inside show logs'
+    p output=@logs.all(@current_user)
+
+
+  end
 
 
 
@@ -56,25 +61,30 @@ class Controller
 
   def create_user
     input = @view.create_account
-    @model.authenticate_user(input)
+    @users.create(input)
+    authenticate
   end
 
   def authenticate
     input = @view.login
     quit if input == 'quit'
-    @login_status = @model.authenticate_user(input)
+    @login = @users.authenticate_user(input)
     @current_user = input[:email] if @login
-    unless @login_status || !quit?
+    #p @current_user
+    p @login
+    unless @login || quit?
       @view.login_fail
       authenticate
     end
   end
 
 end
-db_name = 'captains_log.db'
-db_connection = SQLite3::Database.new( "#{db_name}" )
+#db_name = 'captains_log.db'
+#db_connection = SQLite3::Database.new( "#{db_name}" )
 
-log_model = Users.new(db_name)
+log_model = [Users.new, Logs.new]#(db_name)
 log_view = View.new
 log_cont = Controller.new(log_model, log_view)
+#require 'debugger'; debugger;
 log_cont.start
+log_cont.show_logs
