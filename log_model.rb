@@ -59,5 +59,6 @@ class Users
 end
 
 class Events
-
+  def create(args)
+    $db.execute()
 end
