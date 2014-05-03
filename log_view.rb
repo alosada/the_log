@@ -34,7 +34,7 @@ class View
     puts "incorrect username/password"
   end
 
-  def create_account
+  def create_user
     user_info = {}
     puts "enter your name."
     user_info[:name] = gets.chomp

@@ -16,21 +16,22 @@ class Controller
 
 
   def start
-    command = @view.welcome
-    if command == 'login'
-      authenticate
-    elsif command == 'create'
-      create_user
-    elsif command == 'quit'
-      quit
-    else
-      @view.invalid_input
-      start
+    unless login
+      command = @view.welcome
+      if command == 'login'
+        authenticate
+      elsif command == 'create'
+        create_user
+      elsif command == 'quit'
+        quit
+      else
+        @view.invalid_input
+        start
+      end
     end
   end
 
   def show_logs
-    p 'inside show logs'
     output = @logs.view_all(@current_user)
     input = @view.display_logs(output)
   end
@@ -46,7 +47,7 @@ class Controller
   end
 
   def create_user
-    input = @view.create_account
+    input = @view.create_user
     @users.create(input)
     authenticate
   end
@@ -62,6 +63,10 @@ class Controller
     end
   end
 
+  def create_log
+    @users.
+  end
+
 end
 #db_name = 'captains_log.db'
 #db_connection = SQLite3::Database.new( "#{db_name}" )
@@ -71,4 +76,7 @@ log_view = View.new
 log_cont = Controller.new(log_model, log_view)
 #require 'debugger'; debugger;
 log_cont.start
-log_cont.show_logs
+input = log_cont.show_logs
+
+log_cont.create_log if input =='create_log'
+
