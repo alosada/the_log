@@ -60,4 +60,9 @@ end
 
 class Events
 
+  def view_all(log, user_id)
+    verify_user = $db.execute(<<-SQL
+      SELECT
+      )
+
 end

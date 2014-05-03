@@ -47,7 +47,7 @@ database_connection("captains_log").execute(<<-SQL
     name varchar(255),
     description varchar(255),
     punctual varchar(255) DEFAULT NULL,
-    started_at INTEGER,
+    started_at datetime,
     closed_at datetime,
     created_at datetime default CURRENT_TIMESTAMP,
     updated_at datetime default CURRENT_TIMESTAMP
