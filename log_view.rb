@@ -22,6 +22,9 @@ class View
     user_pass = {}
     puts "enter your email"
     user_pass[:email] = gets.chomp
+    if user_pass[:email] == "quit"
+      return "quit"
+    end
     puts "Enter your password: "
     user_pass[:password] = STDIN.noecho(&:gets).chomp
     user_pass
@@ -33,7 +36,7 @@ class View
 
   def create_account
     user_info = {}
-    puts "enter your desired username."
+    puts "enter your name."
     user_info[:name] = gets.chomp
     puts "enter your e-mail address."
     user_info[:email] = gets.chomp
@@ -45,6 +48,9 @@ class View
   ##### LOG SPECIFIC METHODS
 
   def display_logs(user_logs) #user_logs is an array of logs
+    if user_logs.empty?
+      puts "You have no logs"
+    end
     user_logs.each do |log|
       entry = "| #{log[:name].ljust(25)} |"
       puts  "-" * (entry.length)
@@ -56,7 +62,7 @@ class View
     choice = gets.chomp.type
   end
 
-  def log_details(log)
+  def log_details(log) #log is a hash
     log.each_key do |entry|
       puts "#{entry}: #{log[entry]}"
     end
