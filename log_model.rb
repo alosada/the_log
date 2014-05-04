@@ -4,7 +4,7 @@ $db = SQLite3::Database.open("#{DATABASE}")
 
 class Logs
 
-  def create(args)
+  def create_log(args)
     $db.execute(<<-SQL
       INSERT INTO Logs (user_id, name, description, priority)
       VALUES ('#{args[:user_id]}', '#{args[:name]}', '#{args[:description]}', '#{args[:priority]}');
@@ -12,12 +12,12 @@ class Logs
     )
   end
 
-  def view_all(email)
+  def read_all(user_id)
     $db.execute(<<-SQL
       select * from Logs
       JOIN Users
       ON (Logs.user_id = Users.id)
-      WHERE Users.email IS ('#{email}');
+      WHERE Users.id IS ('#{user_id}');
     SQL
     )
   end
@@ -60,5 +60,10 @@ end
 
 class Events
   def create(args)
-    $db.execute()
+    $db.execute(<<-SQL
+      INSERT INTO Events (log_id, name, description, punctual, null, null)
+      VALUES ('#{args[:log_id]}', '#{args[:name]}', '#{args[:description]}', '#{args[:punctual]}');
+    SQL
+    )
+  end
 end

@@ -3,7 +3,7 @@ require '/Users/apprentice/Desktop/zack_ale_log_MVP/the_log/log_view.rb'
 
 
 class Controller
-
+  attr_reader :login
   def initialize(model,view)
     @users = model[0]
     @logs = model[1]
@@ -32,7 +32,7 @@ class Controller
   end
 
   def show_logs
-    output = @logs.view_all(@current_user)
+    output = @logs.read_all(@current_user)
     input = @view.display_logs(output)
   end
 
@@ -56,7 +56,7 @@ class Controller
     input = @view.login
     quit if input == 'quit'
     @login = @users.authenticate_user(input)
-    @current_user = input[:email] if @login
+    @current_user = input[:user_id] if @login
     unless @login || quit?
       @view.login_fail
       authenticate
@@ -64,7 +64,9 @@ class Controller
   end
 
   def create_log
-    @users.
+    input = @view.create_logs
+    input[:user_id] = @current_user
+    @logs.create_log(input)
   end
 
 end
@@ -76,7 +78,5 @@ log_view = View.new
 log_cont = Controller.new(log_model, log_view)
 #require 'debugger'; debugger;
 log_cont.start
-input = log_cont.show_logs
 
-log_cont.create_log if input =='create_log'
 
