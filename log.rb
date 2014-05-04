@@ -3,7 +3,7 @@ require '/Users/apprentice/Desktop/zack_ale_log_MVP/the_log/log_view.rb'
 
 
 class Controller
-
+  attr_reader :login
   def initialize(model,view)
     @users = model[0]
     @logs = model[1]
@@ -16,26 +16,25 @@ class Controller
 
 
   def start
-    command = @view.welcome
-    if command == 'login'
-      authenticate
-    elsif command == 'create'
-      create_user
-    elsif command == 'quit'
-      quit
-    else
-      @view.invalid_input
-      start
+    unless login
+      command = @view.welcome
+      if command == 'login'
+        authenticate
+      elsif command == 'create'
+        create_user
+      elsif command == 'quit'
+        quit
+      else
+        @view.invalid_input
+        start
+      end
     end
   end
 
   def show_logs
-    p 'inside show logs'
-    output = @logs.all(@current_user)
+    output = @logs.read_all(@current_user)
     input = @view.display_logs(output)
   end
-
-
 
   private
 
@@ -48,7 +47,7 @@ class Controller
   end
 
   def create_user
-    input = @view.create_account
+    input = @view.create_user
     @users.create(input)
     authenticate
   end
@@ -57,13 +56,17 @@ class Controller
     input = @view.login
     quit if input == 'quit'
     @login = @users.authenticate_user(input)
-    @current_user = input[:email] if @login
-    #p @current_user
-    p @login
+    @current_user = input[:user_id] if @login
     unless @login || quit?
       @view.login_fail
       authenticate
     end
+  end
+
+  def create_log
+    input = @view.create_logs
+    input[:user_id] = @current_user
+    @logs.create_log(input)
   end
 
 end
@@ -75,4 +78,5 @@ log_view = View.new
 log_cont = Controller.new(log_model, log_view)
 #require 'debugger'; debugger;
 log_cont.start
-log_cont.show_logs
+
+

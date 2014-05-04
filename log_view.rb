@@ -34,7 +34,7 @@ class View
     puts "incorrect username/password"
   end
 
-  def create_account
+  def create_user
     user_info = {}
     puts "enter your name."
     user_info[:name] = gets.chomp
@@ -59,7 +59,7 @@ class View
     puts "to view a log type in the LOG_ID"
     puts "type CREATE_LOG to create a new log"
     puts "type LOGOUT to logout."
-    choice = gets.chomp.type
+    choice = gets.chomp
   end
 
   def log_details(log) #log is a hash
