@@ -7,18 +7,27 @@ class View
   end
 
   def welcome  #welcome/login screen
-    puts "Welcome to THE LOG"
-    puts "type LOGIN to login to an existing account"
-    puts "type CREATE to make a new account"
-    puts "type QUIT at any time to exit this app"
+    clear_screen
+    puts "******************************************"
+    puts "*                                        *"
+    puts "*          Welcome to The Log            *"
+    puts "*                                        *"
+    puts "******************************************"
+    puts "\nType LOGIN to login to an existing account"
+    puts "\nType CREATE to create a new user"
+    puts "\nType QUIT at any time to exit this app"
+    puts ''
     choice = gets.chomp.downcase
   end
 
   def invalid_input
-    puts "input invalid, please try again"
+    clear_screen
+    puts "\n***Input invalid, please try again***"
+    sleep(0.7)
   end
 
   def login
+    clear_screen
     user_pass = {}
     puts "enter your email"
     user_pass[:email] = gets.chomp
@@ -35,6 +44,7 @@ class View
   end
 
   def create_user
+    clear_screen
     user_info = {}
     puts "enter your name."
     user_info[:name] = gets.chomp
@@ -48,27 +58,34 @@ class View
   ##### LOG SPECIFIC METHODS
 
   def display_logs(user_logs) #user_logs is an array of logs
+    clear_screen
+    puts "|  ID  | Log name:                | Created:"
     if user_logs.empty?
       puts "You have no logs"
     end
     user_logs.each do |log|
-      entry = "| #{log[:name].ljust(25)} |"
+      entry = "| #{log[0].to_s.ljust(4)} | #{log[2].ljust(24)} | #{log[6]}"
       puts  "-" * (entry.length)
       puts entry
     end
-    puts "to view a log type in the LOG_ID"
-    puts "type CREATE_LOG to create a new log"
-    puts "type LOGOUT to logout."
-    choice = gets.chomp
+    puts "-" * 55
+    puts "\nTo view a log type in the ID."
+    puts "\nType CREATE_LOG to create a new log."
+    puts "\nType QUIT to quit the program."
+    gets.chomp
   end
 
   def log_details(log) #log is a hash
-    log.each_key do |entry|
-      puts "#{entry}: #{log[entry]}"
-    end
+    clear_screen
+    print "\n-Log id: "
+    puts log[0][0]
+    print "\n-Log name: "
+    puts log[0][2]
+    print "\n-Log description: "
+    puts log[0][3]
   end
 
-  def create_logs #returns a hash of things a user can put in.
+  def create_log #returns a hash of things a user can put in.
     log_info = {}
     puts "Enter the name of the log"
     log_info[:name] = gets.chomp
@@ -76,7 +93,8 @@ class View
     log_info[:description] = gets.chomp
     puts "Enter the priority of the log"
     log_info[:priority] = gets.chomp
-    puts "Log created!"
+    puts "\n\nLog created!"
+    sleep (0.7)
     log_info
   end
 
@@ -97,7 +115,7 @@ class View
     puts "Log Deleted!"
   end
 
-  def create_events
+  def create_event
     events_info = {}
     puts "Enter the name of the event"
     events_info[:name] = gets.chomp
@@ -106,18 +124,18 @@ class View
     events_info
   end
 
-  def display_events(log, events) #logs takes a log (hash), events is an array of event hashes
-    puts log[:name]
+  def display_events(events) #logs takes a log (hash), events is an array of event hashes
+    puts "\n|  ID  | Event name:              | Started:"
     events.each do |event|
-      entry = "| EVENT_ID = #{event[:id]}| #{event[:name].ljust(25)} |"
-      puts  "-" * (entry.length)
+      entry = "| #{event[0].to_s.ljust(4)}| #{event[2].ljust(24)} |#{event[7]}"
+      puts  "-" * (event.length)
       puts entry
     end
-    puts "-" * (entry.length)
-    puts "to view an EVENT type in the EVENT_ID"
-    puts "type CREATE_LOG to create a new log"
-    puts "type LOGOUT to logout at any time."
-    choice = gets.chomp
+    puts "-" * 55
+    puts "\nTo view an event type in the EVENT_ID"
+    puts "\nType CREATE_EVENT to create a new EVENT"
+    puts "\nType BACK to go back to the logs view."
+    gets.chomp
   end
 
   def update_event(event) #event is a hash
@@ -137,10 +155,20 @@ class View
     puts "Event Deleted!"
   end
 
-  def event_details(event)
-    event.each_key do |entry|
-      puts "#{entry}: #{event[entry]}"
-    end
+  def event_details(log) #log is a hash
+    clear_screen
+    print "\n-Event ID: "
+    puts log[0][0]
+    print "\n-Log ID: "
+    puts log[0][1]
+    print "\n-Event name: "
+    puts log[0][2]
+    print "\n-Event description: "
+    puts log[0][3]
+    print "\n-Created: "
+    puts log[0][7]
+    puts "\n Type BACK to go back to the previous menu."
+    gets.chomp
   end
 
 end

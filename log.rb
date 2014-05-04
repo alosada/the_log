@@ -1,82 +1,114 @@
-require '/Users/apprentice/Desktop/zack_ale_log_MVP/the_log/log_model.rb'
-require '/Users/apprentice/Desktop/zack_ale_log_MVP/the_log/log_view.rb'
+require_relative 'log_model.rb'
+require_relative 'log_view.rb'
 
 
 class Controller
-  attr_reader :login
-  def initialize(model,view)
-    @users = model[0]
-    @logs = model[1]
+
+  def initialize(view, users, logs, events)
+    @events = events
+    @users = users
+    @logs = logs
     @view = view
     @quit = false
     @current_user = nil
+    @active_log = nil
     @login = false
-    @command = nil
+    @back = false
   end
 
 
   def start
-    unless login
+    until logged_in? || quit? do
       command = @view.welcome
       if command == 'login'
         authenticate
+        view_logs(@current_user)
       elsif command == 'create'
         create_user
       elsif command == 'quit'
         quit
       else
         @view.invalid_input
-        start
       end
     end
   end
 
-  def show_logs
-    output = @logs.read_all(@current_user)
-    input = @view.display_logs(output)
-  end
-
   private
-
-  def quit
-   @quit = quit
-  end
 
   def quit?
     @quit
   end
 
-  def create_user
-    input = @view.create_user
-    @users.create(input)
-    authenticate
+  def quit
+   @quit = true
+  end
+
+  def logged_in?
+    @login
   end
 
   def authenticate
-    input = @view.login
-    quit if input == 'quit'
-    @login = @users.authenticate_user(input)
-    @current_user = input[:user_id] if @login
-    unless @login || quit?
-      @view.login_fail
-      authenticate
+    until  logged_in? || quit? do
+      input = @view.login
+      quit if input == 'quit'
+      @login = @users.authenticate_user(input)
+      @current_user = @users.get_id(input[:email])[0][0] if logged_in?
+      @view.login_fail unless logged_in?
     end
   end
 
-  def create_log
-    input = @view.create_logs
-    input[:user_id] = @current_user
-    @logs.create_log(input)
+  def create_user
+    input = @view.create_user
+    @users.create(input)
+  end
+
+  def view_logs(current_user)
+    until quit? do
+      output = @logs.read_all(current_user)
+      input = @view.display_logs(output)
+      if input.to_i.is_a?(Integer) && input.to_i != 0
+        @active_log = input.to_i
+        output = @logs.find_log(@active_log)
+        @view.log_details(output)
+        view_events(@active_log)
+      elsif input == 'create_log'
+        input = @view.create_log
+        @logs.create_log(input, @current_user)
+      elsif input == 'quit'
+        quit
+      else
+        @view.invalid_input
+      end
+    end  
+  end
+
+  def view_events(active_log)
+    until back?
+    output = @events.read_all(active_log)
+    input = @view.display_events(output)  
+      if input.to_i.is_a?(Integer) && input.to_i != 0
+        output = @events.find_event(input)
+        @view.event_details(output[0])
+      elsif input == 'create_event'
+        input = @view.create_event
+        @events.create(input, @active_log)
+      elsif input == 'back'
+        back
+      else
+        @view.invalid_input
+      end
+    end   
+  end
+
+  def back?
+    @back
+  end
+
+  def back
+    @back=true
   end
 
 end
-#db_name = 'captains_log.db'
-#db_connection = SQLite3::Database.new( "#{db_name}" )
 
-log_model = [Users.new, Logs.new]#(db_name)
-log_view = View.new
-log_cont = Controller.new(log_model, log_view)
-#require 'debugger'; debugger;
+log_cont=Controller.new(View.new, Users.new, Logs.new, Events.new)
 log_cont.start
-
-

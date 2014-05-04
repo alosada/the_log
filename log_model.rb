@@ -4,10 +4,10 @@ $db = SQLite3::Database.open("#{DATABASE}")
 
 class Logs
 
-  def create_log(args)
+  def create_log(args, user_id)
     $db.execute(<<-SQL
       INSERT INTO Logs (user_id, name, description, priority)
-      VALUES ('#{args[:user_id]}', '#{args[:name]}', '#{args[:description]}', '#{args[:priority]}');
+      VALUES ('#{user_id}', '#{args[:name]}', '#{args[:description]}', '#{args[:priority]}');
     SQL
     )
   end
@@ -50,20 +50,42 @@ class Users
     db_password.join("") == args[:password]
   end
 
-  def all
+  def get_id(email)
     $db.execute(<<-SQL
-      SELECT * FROM Users;
-    SQL
-    )
+      SELECT id
+      FROM users
+      WHERE email IS ('#{email}');
+      SQL
+      )
   end
+
 end
 
 class Events
-  def create(args)
+
+  def create(args, active_log)
     $db.execute(<<-SQL
-      INSERT INTO Events (log_id, name, description, punctual, null, null)
-      VALUES ('#{args[:log_id]}', '#{args[:name]}', '#{args[:description]}', '#{args[:punctual]}');
+      INSERT INTO Events (log_id, name, description)
+      VALUES ('#{active_log}', '#{args[:name]}', '#{args[:description]}');
     SQL
     )
   end
+
+  def read_all(active_log)
+    $db.execute(<<-SQL
+      select * from Events
+      JOIN Logs
+      ON (Logs.id = Events.log_id)
+      WHERE Logs.id IS ('#{active_log}');
+    SQL
+    )
+  end
+
+    def find_event(id)
+    $db.execute(<<-SQL
+      SELECT * FROM Events WHERE Events.id IS ('#{id}');
+    SQL
+    )
+  end
+
 end
