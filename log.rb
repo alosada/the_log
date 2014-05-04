@@ -3,7 +3,7 @@ require '/Users/apprentice/Desktop/zack_ale_log_MVP/the_log/log_view.rb'
 
 
 class Controller
-  attr_reader :login
+
   def initialize(model,view)
     @users = model[0]
     @logs = model[1]
@@ -11,12 +11,9 @@ class Controller
     @quit = false
     @current_user = nil
     @login = false
-    @command = nil
   end
 
-
-  def start
-    unless login
+  unless @login
       command = @view.welcome
       if command == 'login'
         authenticate
@@ -28,7 +25,6 @@ class Controller
         @view.invalid_input
         start
       end
-    end
   end
 
   def show_logs
@@ -37,6 +33,10 @@ class Controller
   end
 
   private
+
+  def create_user_log
+
+  end
 
   def quit
    @quit = quit
@@ -52,10 +52,18 @@ class Controller
     authenticate
   end
 
+  def valid_user
+    @current_user != nil
+  end
+
   def authenticate
     input = @view.login
     quit if input == 'quit'
+
     @login = @users.authenticate_user(input)
+    if @users.authenticate_user(input)
+      @users.get_id
+    end
     @current_user = input[:user_id] if @login
     unless @login || quit?
       @view.login_fail
