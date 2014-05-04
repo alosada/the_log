@@ -52,14 +52,15 @@ class View
       puts "You have no logs"
     end
     user_logs.each do |log|
-      entry = "| #{log[:name].ljust(25)} |"
+      entry = "| #{log[0].to_s.ljust(4)} | #{log[2].ljust(20)} | #{log[6]}"
       puts  "-" * (entry.length)
       puts entry
     end
+    puts "-" * 51
     puts "to view a log type in the LOG_ID"
     puts "type CREATE_LOG to create a new log"
     puts "type LOGOUT to logout."
-    choice = gets.chomp
+    gets.chomp
   end
 
   def log_details(log) #log is a hash
