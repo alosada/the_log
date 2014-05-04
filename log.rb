@@ -4,14 +4,16 @@ require_relative 'log_view.rb'
 
 class Controller
 
-  def initialize(model,view)
-    @users = model[0]
-    @logs = model[1]
+  def initialize(view, users, logs, events)
+    @events = events
+    @users = users
+    @logs = logs
     @view = view
     @quit = false
     @current_user = nil
+    @active_log = nil
     @login = false
-    @command = nil
+    @back = false
   end
 
 
@@ -33,20 +35,12 @@ class Controller
 
   private
 
-  def quit
-   @quit = quit
-  end
-
   def quit?
     @quit
   end
 
   def quit
    @quit = true
-  end
-
-  def quit?
-    @quit
   end
 
   def logged_in?
@@ -69,11 +63,52 @@ class Controller
   end
 
   def view_logs(current_user)
-    output = @logs.read_all(current_user)
-    input = @view.display_logs(output)
+    until quit? do
+      output = @logs.read_all(current_user)
+      input = @view.display_logs(output)
+      if input.to_i.is_a?(Integer) && input.to_i != 0
+        @active_log = input.to_i
+        output = @logs.find_log(@active_log)
+        @view.log_details(output)
+        view_events(@active_log)
+      elsif input == 'create_log'
+        input = @view.create_log
+        @logs.create_log(input, @current_user)
+      elsif input == 'quit'
+        quit
+      else
+        @view.invalid_input
+      end
+    end  
+  end
+
+  def view_events(active_log)
+    until back?
+    output = @events.read_all(active_log)
+    input = @view.display_events(output)  
+      if input.to_i.is_a?(Integer) && input.to_i != 0
+        output = @events.find_event(input)
+        @view.event_details(output[0])
+      elsif input == 'create_event'
+        input = @view.create_event
+        @events.create(input, @active_log)
+      elsif input == 'back'
+        back
+      else
+        @view.invalid_input
+      end
+    end   
+  end
+
+  def back?
+    @back
+  end
+
+  def back
+    @back=true
   end
 
 end
 
-log_cont=Controller.new([Users.new, Logs.new], View.new)
+log_cont=Controller.new(View.new, Users.new, Logs.new, Events.new)
 log_cont.start
