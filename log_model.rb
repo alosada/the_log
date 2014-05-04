@@ -57,6 +57,15 @@ class Users
 
   end
 
+  def get_id(email)
+    $db.execute(<<-SQL
+      SELECT id
+      FROM users
+      WHERE email IS ('#{email}');
+      SQL
+      )
+  end
+
   def all
     $db.execute(<<-SQL
       SELECT * FROM Users;
