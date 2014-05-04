@@ -59,7 +59,7 @@ class View
     puts "to view a log type in the LOG_ID"
     puts "type CREATE_LOG to create a new log"
     puts "type LOGOUT to logout."
-    choice = gets.chomp
+    gets.chomp
   end
 
   def log_details(log) #log is a hash
