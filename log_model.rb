@@ -12,14 +12,19 @@ class Logs
     )
   end
 
-  def read_all(user_id)
-    $db.execute(<<-SQL
-      select * from Logs
+  def get_all_logs(user_id)
+    logs = $db.execute(<<-SQL
+      select Logs.id, Logs.name from Logs
       JOIN Users
       ON (Logs.user_id = Users.id)
       WHERE Users.id IS ('#{user_id}');
     SQL
     )
+    # labels = [:user_id, :name]
+    # logs.map! do |log|
+    #   labels.zip(log)
+    # end
+    # Hash[logs]
   end
 
   def find_log(id)
@@ -40,6 +45,7 @@ class Users
     )
   end
 
+
   def authenticate_user(args)
     db_password = $db.execute(<<-SQL
       SELECT password
@@ -48,6 +54,7 @@ class Users
       SQL
     )
     db_password.join("") == args[:password]
+
   end
 
   def get_id(email)

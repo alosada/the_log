@@ -4,6 +4,7 @@ require_relative 'log_view.rb'
 
 class Controller
 
+
   def initialize(view, users, logs, events)
     @events = events
     @users = users
@@ -30,7 +31,6 @@ class Controller
       else
         @view.invalid_input
       end
-    end
   end
 
   private
