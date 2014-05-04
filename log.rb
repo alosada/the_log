@@ -70,13 +70,6 @@ class Controller
   end
 
 end
-#db_name = 'captains_log.db'
-#db_connection = SQLite3::Database.new( "#{db_name}" )
 
-log_model = [Users.new, Logs.new]#(db_name)
-log_view = View.new
-log_cont = Controller.new(log_model, log_view)
-#require 'debugger'; debugger;
-log_cont.start
 
 
